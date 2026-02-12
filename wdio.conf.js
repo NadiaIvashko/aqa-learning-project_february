@@ -21,10 +21,14 @@ exports.config = {
   capabilities: [
     {
       browserName: 'chrome',
+      'goog:chromeOptions': {
+        args: ['--disable-blink-features=AutomationControlled'],
+        detach: true
+      }
     },
   ],
 
-  logLevel: 'trace',
+  logLevel: 'warn',
 
   bail: 0,
   baseUrl: 'https://cloud.google.com',
