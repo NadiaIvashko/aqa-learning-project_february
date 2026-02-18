@@ -37,7 +37,7 @@ exports.config = {
   connectionRetryTimeout: 90000,
   connectionRetryCount: 3,
 
-  reporters: ['spec', 'allure'],
+   reporters: ['spec'],  // Тільки spec, без allure
   services: ['chromedriver'],
 
   framework: 'mocha',
