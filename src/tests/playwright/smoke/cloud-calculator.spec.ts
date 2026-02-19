@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { CalculatorPage } from '../../../pageObject/playwright/calculator_page';
 
 test.describe('Cloud Calculator', () => {
@@ -10,7 +10,7 @@ test.describe('Cloud Calculator', () => {
   test.beforeEach(async ({ page }) => {
     calculatorPage = new CalculatorPage(page);
     await calculatorPage.open();
-    await page.waitForTimeout(2000);
+    await calculatorPage.addEstimateButton.waitFor({ state: 'visible' });
   });
 
   test('Should be able to add new entities into the calculator', async () => {
@@ -23,7 +23,6 @@ test.describe('Cloud Calculator', () => {
     await calculatorPage.verifyCurrentUrl();
     await calculatorPage.verifyAddEstimateButtonIsDisplayed();
     await calculatorPage.addComputeEngineEstimate();
-    await calculatorPage.page.waitForTimeout(1000);
     await calculatorPage.incrementInstances(INSTANCES_TO_ADD);
     await calculatorPage.verifyTotalCost(EXPECTED_TOTAL_COST);
   });
