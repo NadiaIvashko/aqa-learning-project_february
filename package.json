@@ -11,7 +11,7 @@
     "test:playwright:headed": "playwright test --headed",
     "test:playwright:debug": "playwright test --debug",
     "test:playwright:ui": "playwright test --ui",
-    "test:wdio:headed": "wdio run wdio.conf.js --headed",  
+    "test:wdio:headed": "wdio run wdio.conf.js --headed",
     "test:both": "npm run test:wdio && npm run test:playwright",
     "test:both:parallel": "concurrently \"npm run test:wdio\" \"npm run test:playwright\"",
     "test:compare": "node scripts/compare-results.js",
@@ -20,7 +20,8 @@
     "test:report:both": "npm run test:report:wdio && npm run test:report:playwright",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "lint:tests": "eslint src/tests/playwright/**/*.ts"
+    "lint:tests": "eslint src/tests/playwright/**/*.ts",
+    "prepare": "husky"
   },
   "license": "EPAM Systems",
   "dependencies": {
@@ -54,10 +55,18 @@
     "eslint-plugin-playwright": "^2.7.0",
     "eslint-plugin-prettier": "^5.5.5",
     "fs-extra": "^11.3.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.56.0",
     "wdio-chromedriver-service": "7.0.0",
     "webdriverio": "7.2.3"
-  }
+  },
+  "lint-staged": {
+    "*.{ts,js,mjs}": [
+    "eslint --fix",
+    "git add"
+  ]
+}
 }
