@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
+import { URLS } from '../../data/urls';
 
 export class CalculatorPage extends BasePage {
   private readonly selectors = {
@@ -14,7 +15,7 @@ export class CalculatorPage extends BasePage {
   };
 
   constructor(page: Page) {
-    super(page, '/products/calculator');
+    super(page, URLS.CALCULATOR);
   }
 
   get addEstimateButton(): Locator {

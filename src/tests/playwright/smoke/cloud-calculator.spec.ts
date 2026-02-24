@@ -1,10 +1,8 @@
 import { test } from '@playwright/test';
 import { CalculatorPage } from '../../../pageObject/playwright/calculator_page';
+import { TEST_DATA } from '../../../data/testData';
 
 test.describe('Cloud Calculator', () => {
-  const INSTANCES_TO_ADD = 2;
-  const EXPECTED_TOTAL_COST = '$201.03';
-
   let calculatorPage: CalculatorPage;
 
   test.beforeEach(async ({ page }) => {
@@ -23,7 +21,7 @@ test.describe('Cloud Calculator', () => {
     await calculatorPage.verifyCurrentUrl();
     await calculatorPage.verifyAddEstimateButtonIsDisplayed();
     await calculatorPage.addComputeEngineEstimate();
-    await calculatorPage.incrementInstances(INSTANCES_TO_ADD);
-    await calculatorPage.verifyTotalCost(EXPECTED_TOTAL_COST);
+    await calculatorPage.incrementInstances(TEST_DATA.INSTANCES_TO_ADD);
+    await calculatorPage.verifyTotalCost(TEST_DATA.EXPECTED_TOTAL_COST);
   });
 });
