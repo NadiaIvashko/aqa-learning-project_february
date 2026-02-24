@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { CalculatorPage } from '../../../pageObject/playwright/calculator_page';
+import { CalculatorPage } from '../../pageObject/calculator_page';
 import { TEST_DATA } from '../../../data/testData';
 
 test.describe('Cloud Calculator', () => {

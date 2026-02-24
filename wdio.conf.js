@@ -11,9 +11,9 @@ exports.config = {
 
   runner: 'local',
 
-  specs: ['./src/tests/**/**.tests.ts'],
+  specs: ['./src/wdio/tests/**/**.tests.ts'],
   suites: {
-    smoke: ['./src/tests/smoke/**.tests.js'],
+    smoke: ['./src/wdio/tests/smoke/**.tests.ts'],
   },
 
   maxInstances: 1,

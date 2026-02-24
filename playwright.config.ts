@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export default defineConfig({
-  testDir: './src/tests/playwright',
+  testDir: './src/playwright/tests',
   outputDir: 'test-results-playwright',
 
   reporter: [

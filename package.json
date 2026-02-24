@@ -7,7 +7,7 @@
     "test:wdio": "wdio run wdio.conf.js",
     "test:wdio:smoke": "wdio run wdio.conf.js --suite smoke",
     "test:playwright": "playwright test",
-    "test:playwright:smoke": "playwright test src/tests/playwright/smoke",
+    "test:playwright:smoke": "playwright test src/playwright/tests/smoke",
     "test:playwright:headed": "playwright test --headed",
     "test:playwright:debug": "playwright test --debug",
     "test:playwright:ui": "playwright test --ui",
@@ -20,7 +20,7 @@
     "test:report:both": "npm run test:report:wdio && npm run test:report:playwright",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "lint:tests": "eslint src/tests/playwright/**/*.ts",
+    "lint:tests": "eslint src/playwright/tests/**/*.ts",
     "prepare": "husky"
   },
   "license": "EPAM Systems",
