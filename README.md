@@ -20,8 +20,8 @@ Timeouts: 5000ms default
 
 npm run test:playwright:ui
 npm run test:wdio:headed
-npm run test:both:parallel
+npm run test:both:parallel //поміняти тут треба адреси
 
-npx playwright test src/tests/playwright/smoke
+npx playwright test src/playwright/tests/smoke
 
 npm run lint:fix
