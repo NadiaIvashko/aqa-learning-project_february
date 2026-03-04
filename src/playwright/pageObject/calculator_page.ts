@@ -1,15 +1,37 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator, expect, Download } from '@playwright/test';
 import { BasePage } from './BasePage';
 import { URLS } from '../../data/urls';
+import * as fs from 'fs';
+import * as path from 'path';
+import CSVFileValidator from 'csv-file-validator';
+
+interface CsvRow {
+  [key: string]: string;
+}
+
+interface CsvValidationResult {
+  data: CsvRow[];
+  inValidData: { message: string; rowIndex?: number; columnIndex?: number }[];
+}
 
 export class CalculatorPage extends BasePage {
   private readonly dropdownOptionSelector = 'li[role="option"]';
+  private readonly csvTotalPriceLabel = 'total price:';
+  private readonly csvHeadersConfig = [
+    { name: 'service_display_name', inputName: 'service_display_name', required: false },
+    { name: 'name', inputName: 'name', required: false },
+    { name: 'quantity', inputName: 'quantity', required: false },
+    { name: 'region', inputName: 'region', required: false },
+    { name: 'service_id', inputName: 'service_id', required: false },
+    { name: 'sku', inputName: 'sku', required: false },
+    { name: 'total_price, USD', inputName: 'total_price', required: false },
+    { name: 'notes', inputName: 'notes', optional: true },
+  ];
 
   constructor(page: Page) {
     super(page, URLS.CALCULATOR);
   }
 
-  // Locators using getByRole
   get addEstimateButton(): Locator {
     return this.page.locator('c-wiz.SSPGKf span.UywwFc-vQzf8d');
   }
@@ -54,7 +76,14 @@ export class CalculatorPage extends BasePage {
     return this.page.getByRole('spinbutton', { name: 'Boot disk size (GiB) tooltip' });
   }
 
-  // Methods for adding estimates
+  get downloadCsvButton(): Locator {
+    return this.page
+      .locator('span[data-is-tooltip-wrapper="true"]')
+      .filter({ has: this.page.locator('div[role="tooltip"]', { hasText: 'Download .csv' }) })
+      .locator('button');
+  }
+
+  // Methods
   async clickAddEstimate(): Promise<void> {
     await this.addEstimateButton.waitFor({ state: 'visible' });
     await this.addEstimateButton.click();
@@ -84,7 +113,6 @@ export class CalculatorPage extends BasePage {
     await this.verifyConfigurationBlockIsDisplayed();
   }
 
-  // Methods for filling fields
   async selectMachineType(machineType: string): Promise<void> {
     await this.machineTypeDropdown.click();
     await this.page.waitForTimeout(500);
@@ -121,10 +149,16 @@ export class CalculatorPage extends BasePage {
     await this.bootDiskSizeInput.pressSequentially(sizeGb);
   }
 
-  // Methods for getting and verifying cost
   async getTotalCost(): Promise<string> {
     await this.totalCostElement.waitFor({ state: 'visible' });
-    await this.page.waitForTimeout(1000);
+    // Wait for the cost value to stabilize (re-read until it stops changing)
+    let previous = '';
+    for (let i = 0; i < 10; i++) {
+      await this.page.waitForTimeout(500);
+      const current = (await this.totalCostElement.textContent())?.trim() ?? '';
+      if (current === previous && current !== '') break;
+      previous = current;
+    }
     const text = await this.totalCostElement.textContent();
     return text?.trim() || '';
   }
@@ -157,7 +191,6 @@ export class CalculatorPage extends BasePage {
     expect(before).toBe(after);
   }
 
-  // Verification methods
   async verifyEstimationModalIsDisplayed(): Promise<void> {
     await expect(this.addEstimationModal).toBeVisible({ timeout: 5000 });
   }
@@ -169,5 +202,60 @@ export class CalculatorPage extends BasePage {
   async verifyCurrentUrl(): Promise<void> {
     const currentUrl = await this.getCurrentUrl();
     expect(currentUrl).toContain(URLS.CALCULATOR);
+  }
+
+  // Download CSV and save to disk, returns file path
+  async downloadCsvFile(downloadDir: string): Promise<{ download: Download; filePath: string }> {
+    await this.downloadCsvButton.waitFor({ state: 'visible', timeout: 10000 });
+    const downloadPromise = this.page.waitForEvent('download', { timeout: 30000 });
+    await this.downloadCsvButton.click();
+    const download = await downloadPromise;
+
+    if (!fs.existsSync(downloadDir)) {
+      fs.mkdirSync(downloadDir, { recursive: true });
+    }
+    const filePath = path.join(downloadDir, download.suggestedFilename());
+    await download.saveAs(filePath);
+    return { download, filePath };
+  }
+
+  // Verifies that the downloaded file exists and has a .csv extension
+  verifyCsvFileDownloaded(filePath: string, fileName: string): void {
+    expect(fs.existsSync(filePath)).toBe(true);
+    expect(fileName.endsWith('.csv')).toBe(true);
+  }
+
+  // Validates CSV file format: non-empty, correct headers and row/column structure
+  async verifyCsvFormat(filePath: string): Promise<CsvRow[]> {
+    const csvContent = fs.readFileSync(filePath, 'utf-8');
+    expect(csvContent.length).toBeGreaterThan(0);
+
+    const validationResult: CsvValidationResult = await CSVFileValidator(csvContent, {
+      headers: this.csvHeadersConfig,
+    });
+
+    if (validationResult.inValidData.length > 0) {
+      console.log('CSV Validation errors:', validationResult.inValidData);
+    }
+    expect(validationResult.inValidData.length).toBe(0);
+
+    // At least one data row with service info must be present
+    const dataRows = validationResult.data.filter((row) => row['service_display_name']?.trim());
+    expect(dataRows.length).toBeGreaterThan(0);
+
+    return validationResult.data;
+  }
+
+  // Validates that the "Total Price:" row in the CSV matches the UI total cost
+  async verifyCsvMatchesUi(filePath: string, uiTotalCost: string): Promise<void> {
+    const rows = await this.verifyCsvFormat(filePath);
+    const uiTotalCostNumeric = parseFloat(uiTotalCost.replace(/[^0-9.]/g, ''));
+
+    const totalPriceRow = rows.find((row) =>
+      Object.values(row).some((v) => v?.trim().toLowerCase() === this.csvTotalPriceLabel)
+    );
+    expect(totalPriceRow).toBeDefined();
+    const csvExplicitTotal = parseFloat(totalPriceRow?.['total_price'] ?? '0');
+    expect(csvExplicitTotal).toBeCloseTo(uiTotalCostNumeric, 1);
   }
 }

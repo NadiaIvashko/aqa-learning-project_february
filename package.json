@@ -49,6 +49,7 @@
     "allure-playwright": "^3.4.5",
     "chalk": "^5.6.2",
     "concurrently": "^9.2.1",
+    "csv-file-validator": "^2.2.0",
     "dotenv": "^16.4.5",
     "eslint": "^10.0.0",
     "eslint-config-prettier": "^10.1.8",
@@ -65,7 +66,7 @@
   },
   "lint-staged": {
     "*.{ts,js,mjs}": [
-    "eslint --fix"
-  ]
-}
+      "eslint --fix"
+    ]
+  }
 }
