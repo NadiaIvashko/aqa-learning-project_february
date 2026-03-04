@@ -58,13 +58,11 @@ export class CloudStoragePage extends BasePage {
   }
 
   async selectLocation(location: string): Promise<void> {
+    await this.locationDropdown.waitFor({ state: 'visible' });
     await this.locationDropdown.click();
-    await this.page.waitForTimeout(1000);
-    await this.page
-      .locator(this.dropdownOptionSelector)
-      .filter({ hasText: location })
-      .first()
-      .click({ force: true });
+    const option = this.page.locator(this.dropdownOptionSelector).filter({ hasText: location });
+    await option.waitFor({ state: 'visible' });
+    await option.click();
   }
 
   async selectStorageClass(storageClass: string): Promise<void> {

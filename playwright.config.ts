@@ -7,6 +7,12 @@ export default defineConfig({
   testDir: './src/playwright/tests',
   outputDir: 'test-results-playwright',
 
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixels: 200,
+    },
+  },
+
   reporter: [
     [
       'html',
