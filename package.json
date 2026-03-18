@@ -11,17 +11,13 @@
     "test:playwright:headed": "playwright test --headed",
     "test:playwright:debug": "playwright test --debug",
     "test:playwright:ui": "playwright test --ui",
-    "test:wdio:headed": "wdio run wdio.conf.js --headed",
+    "test:wdio:ui": "wdio run wdio.conf.js --ui",
     "test:both": "npm run test:wdio && npm run test:playwright",
     "test:both:parallel": "concurrently \"npm run test:wdio\" \"npm run test:playwright\"",
     "test:compare": "node scripts/compare-results.js",
     "test:report:wdio": "allure generate allure-results-wdio --clean -o allure-report-wdio && allure open allure-report-wdio",
     "test:report:playwright": "playwright show-report",
-    "test:report:both": "npm run test:report:wdio && npm run test:report:playwright",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "lint:tests": "eslint src/tests/playwright/**/*.ts",
-    "prepare": "husky"
+    "test:report:both": "npm run test:report:wdio && npm run test:report:playwright"
   },
   "license": "EPAM Systems",
   "dependencies": {
@@ -42,30 +38,15 @@
     "node": "14"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.58.2",
-    "@reportportal/agent-js-playwright": "^5.4.0",
     "@wdio/allure-reporter": "^9.24.0",
     "allure-playwright": "^3.4.5",
     "chalk": "^5.6.2",
     "concurrently": "^9.2.1",
     "dotenv": "^16.4.5",
-    "eslint": "^10.0.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-playwright": "^2.7.0",
-    "eslint-plugin-prettier": "^5.5.5",
     "fs-extra": "^11.3.3",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.7",
-    "prettier": "^3.8.1",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.56.0",
+    "typescript": "4.2.3",
     "wdio-chromedriver-service": "7.0.0",
     "webdriverio": "7.2.3"
-  },
-  "lint-staged": {
-    "*.{ts,js,mjs}": [
-    "eslint --fix"
-  ]
-}
+  }
 }
