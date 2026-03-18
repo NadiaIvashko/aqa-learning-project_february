@@ -19,9 +19,5 @@ Browser: Chrome (headless configurable)
 Timeouts: 5000ms default
 
 npm run test:playwright:ui
-npm run test:wdio:headed
+npm run test:wdio:ui
 npm run test:both:parallel
-
-npx playwright test src/tests/playwright/smoke
-
-npm run lint:fix

@@ -61,15 +61,15 @@ export class CalculatorPage extends BasePage {
   }
 
   async incrementInstances(times: number = 1): Promise<void> {
-    const button = await this.incrementButton;
-    await button.waitForDisplayed({ timeout: 5000 });
-    await button.waitForClickable({ timeout: 5000 });
-
-    for (let i = 0; i < times; i++) {
-      await button.click();
-      await browser.pause(500);
-    }
+  const button = await this.incrementButton;
+  await button.waitForDisplayed({ timeout: 5000 });
+  await button.waitForClickable({ timeout: 5000 });
+  
+  for (let i = 0; i < times; i++) {
+    await button.click();
+    await browser.pause(500); 
   }
+}
 
   async getTotalCost(): Promise<string> {
     const element = await this.totalCostElement;

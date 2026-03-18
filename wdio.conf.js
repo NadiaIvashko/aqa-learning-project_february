@@ -23,8 +23,8 @@ exports.config = {
       browserName: 'chrome',
       'goog:chromeOptions': {
         args: ['--disable-blink-features=AutomationControlled'],
-        detach: true,
-      },
+        detach: true
+      }
     },
   ],
 
@@ -37,7 +37,7 @@ exports.config = {
   connectionRetryTimeout: 90000,
   connectionRetryCount: 3,
 
-  reporters: ['spec'], // Тільки spec, без allure
+   reporters: ['spec'],  // Тільки spec, без allure
   services: ['chromedriver'],
 
   framework: 'mocha',
@@ -61,5 +61,5 @@ exports.config = {
 
   onComplete() {
     console.warn(`Finish time: ${moment().format('YYYY-MM-DD HH:mm:ss')}`);
-  },
+  }
 };
