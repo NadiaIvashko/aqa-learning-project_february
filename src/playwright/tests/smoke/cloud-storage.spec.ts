@@ -37,8 +37,8 @@ test.describe('Cloud Storage', () => {
     await calculatorPage.addCloudStorageEstimate();
 
     await cloudStoragePage.selectLocationType(TEST_DATA.LOCATION_TYPE_MULTI_REGION);
-    // DO NOT WORK i DO NOT WHY
-    await cloudStoragePage.selectLocation(TEST_DATA.LOCATION_TOKYO_OSAKA);
+    //не працює метод чогось
+    await cloudStoragePage.selectLocation(TEST_DATA.LOCATION_USA);
     await cloudStoragePage.selectStorageClass(TEST_DATA.STORAGE_CLASS_STANDARD);
     await cloudStoragePage.setTotalStorage(TEST_DATA.STORAGE_AMOUNT_SMALL);
 
