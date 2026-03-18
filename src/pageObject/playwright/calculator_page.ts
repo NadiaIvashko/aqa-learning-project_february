@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
+import { URLS } from '../../data/urls';
 
 export class CalculatorPage extends BasePage {
   private readonly selectors = {
@@ -14,7 +15,7 @@ export class CalculatorPage extends BasePage {
   };
 
   constructor(page: Page) {
-    super(page, '/products/calculator');
+    super(page, URLS.CALCULATOR);
   }
 
   get addEstimateButton(): Locator {
@@ -53,10 +54,10 @@ export class CalculatorPage extends BasePage {
 
   async incrementInstances(times: number = 1): Promise<void> {
     await this.incrementButton.waitFor({ state: 'visible', timeout: 5000 });
-    
+
     for (let i = 0; i < times; i++) {
       await this.incrementButton.click();
-      await this.page.waitForTimeout(500);
+      await this.incrementButton.waitFor({ state: 'visible' });
     }
   }
 
@@ -89,7 +90,6 @@ export class CalculatorPage extends BasePage {
 
   async addComputeEngineEstimate(): Promise<void> {
     await this.clickAddEstimate();
-    await this.page.waitForTimeout(1000);
     await this.verifyEstimationModalIsDisplayed();
     await this.selectComputeEngine();
     await this.verifyConfigurationBlockIsDisplayed();
