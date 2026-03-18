@@ -1,10 +1,9 @@
-import { CalculatorPage } from '../../../pageObject/wdio/calculator_page';
-
+import { CalculatorPage } from '../../pageObject/calculator_page';
 
 describe('Cloud Calculator', () => {
   const calculatorPage = new CalculatorPage();
-  const INSTANCES_TO_ADD : number = 2;
-  const EXPECTED_TOTAL_COST : string = '$201.03'
+  const INSTANCES_TO_ADD: number = 2;
+  const EXPECTED_TOTAL_COST: string = '$201.03';
 
   beforeEach(async () => {
     await calculatorPage.open();
