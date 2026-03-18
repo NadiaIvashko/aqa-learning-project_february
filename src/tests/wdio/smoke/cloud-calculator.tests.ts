@@ -1,4 +1,5 @@
-import { CalculatorPage } from "../../pageObject/calculator_page";
+import { CalculatorPage } from '../../../pageObject/wdio/calculator_page';
+
 
 describe('Cloud Calculator', () => {
   const calculatorPage = new CalculatorPage();
