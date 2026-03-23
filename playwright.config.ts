@@ -1,10 +1,15 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './src/tests/playwright',
-  
-  outputDir: 'test-results-playwright',  // Окрема директорія
-  
+  testDir: './src/playwright/tests',
+  outputDir: 'test-results-playwright',
+
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixels: 200,
+    },
+  },
+
   reporter: [
     ['html', { outputFolder: 'playwright-report' }],
     ['list'],

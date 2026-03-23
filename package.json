@@ -7,7 +7,7 @@
     "test:wdio": "wdio run wdio.conf.js",
     "test:wdio:smoke": "wdio run wdio.conf.js --suite smoke",
     "test:playwright": "playwright test",
-    "test:playwright:smoke": "playwright test src/tests/playwright/smoke",
+    "test:playwright:smoke": "playwright test src/playwright/tests/smoke",
     "test:playwright:headed": "playwright test --headed",
     "test:playwright:debug": "playwright test --debug",
     "test:playwright:ui": "playwright test --ui",
@@ -17,7 +17,11 @@
     "test:compare": "node scripts/compare-results.js",
     "test:report:wdio": "allure generate allure-results-wdio --clean -o allure-report-wdio && allure open allure-report-wdio",
     "test:report:playwright": "playwright show-report",
-    "test:report:both": "npm run test:report:wdio && npm run test:report:playwright"
+    "test:report:both": "npm run test:report:wdio && npm run test:report:playwright",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:tests": "eslint src/playwright/tests/**/*.ts",
+    "prepare": "husky"
   },
   "license": "EPAM Systems",
   "dependencies": {
@@ -43,10 +47,16 @@
     "allure-playwright": "^3.4.5",
     "chalk": "^5.6.2",
     "concurrently": "^9.2.1",
+    "csv-file-validator": "^2.2.0",
     "dotenv": "^16.4.5",
     "fs-extra": "^11.3.3",
     "typescript": "4.2.3",
     "wdio-chromedriver-service": "7.0.0",
     "webdriverio": "7.2.3"
+  },
+  "lint-staged": {
+    "*.{ts,js,mjs}": [
+      "eslint --fix"
+    ]
   }
 }

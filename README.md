@@ -18,6 +18,18 @@ Base URL: https://cloud.google.com
 Browser: Chrome (headless configurable)
 Timeouts: 5000ms default
 
+# Run Playwright tests in UI mode
 npm run test:playwright:ui
-npm run test:wdio:ui
-npm run test:both:parallel
+
+# Run WebdriverIO tests in headed (visible browser) mode
+npm run test:wdio:headed
+npm run test:both:parallel //поміняти тут треба адреси
+
+# Run all Playwright smoke tests
+npx playwright test src/playwright/tests/smoke
+
+# Fix linting errors automatically
+npm run lint:fix
+
+# Update screenshot baselines (run when UI changes are intentional)
+npx playwright test screenshot.spec.ts --update-snapshots

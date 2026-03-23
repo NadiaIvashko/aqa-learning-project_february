@@ -1,4 +1,4 @@
-import { CalculatorPage } from '../../../pageObject/wdio/calculator_page';
+import { CalculatorPage } from '../../pageObject/calculator_page';
 
 
 describe('Cloud Calculator', () => {
